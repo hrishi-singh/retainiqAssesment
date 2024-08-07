@@ -4,60 +4,77 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import data from "./data.json";
 import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import BTN from '../../Components/UI/button';
+import Design from '../popup/page';
 import "react-toastify/dist/ReactToastify.css";
-// import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-// import { PiPlaceholder } from "react-icons/pi";
 
 const table = () => {
-  const [details, setDetails] = useState(data);
+  const [showDesign,setShowDesign] =useState(false);
+  const [insertImage,setInsertImage]=useState("");
+  const [rows, setRows] = useState(data);
   const [columns, setColumns] = useState([]);
   const dragRow =useRef(0);
   const draggedOverRow=useRef(0);
-
-
   const fixedVariants = ["Primary Variant", "Variant 2"];
-  const addColumn = (event) => {
+  const [rowIndex,setRowIndex]=useState(-1);
+  const [colmIndex,setColmIndex]=useState(-1);
+
+
+
+  const addColumn = (event) =>{
     event.preventDefault;
     const newColumn = "Variant";
     const newColumns = [...columns, newColumn];
     setColumns(newColumns);
     toast.success("Variant Added");
   };
+
+
   const addRow = (event) => {
     event.preventDefault();
-    const newDetail = {
+    const newRow = {
       ProductFilters: [],
       Variants: ["", ""],
     };
-    const newDetails = [...details, newDetail];
-    setDetails(newDetails);
+    const newRows = [...rows, newRow];
+    setRows(newRows);
     toast.success("State Added");
   };
 
+
+
   const deleteRow = (event, index) => {
     event.preventDefault();
-    console.log(event);
-    const newDetail = [...details];
-    newDetail.splice(index, 1);
-    setDetails(newDetail);
+    const newRow = [...rows];
+    newRow.splice(index, 1);
+    setRows(newRow);
     toast.success("State Removed");
   };
 
   const deleteColumn = (event, index) => {
     event.preventDefault();
-    console.log(index);
     const newColumns = [...columns];
     newColumns.splice(index, 1);
     setColumns(newColumns);
     toast.success("Variant Removed");
   };
+
   const handleDrag =()=>{
-    const newDetail=[...details]
-    const element=newDetail.splice(dragRow.current,1)[0];
-    console.log(element)
-    newDetail.splice(draggedOverRow.current,0,element)
-    setDetails(newDetail)
+    const newRow=[...rows]
+    const element=newRow.splice(dragRow.current,1)[0];
+    newRow.splice(draggedOverRow.current,0,element)
+    setRows(newRow)
   }
+  const updateImage=(i,j)=>{
+    const newRow=[...rows]
+    const val=insertImage
+    newRow[i].Variants.splice(j,1,val)
+    setInsertImage("")
+    setShowDesign(false)
+    setRows(newRow)
+    console.log(showDesign)
+  }
+
   return (
     <div className="overflow-x-scroll">
       <table>
@@ -69,12 +86,13 @@ const table = () => {
             <th className="text-prim-dark-100 font-medium min-w-96 h-20 bg-slate-100 sticky left-20 z-0 bottom-0">
               Product Filters
             </th>
+             {/*fixed variants i.e. Primary Variant and variant 2 mapping in Tables*/}
             {fixedVariants.map((variant, index) => (
               <th className=" w-60 -z-50">
                 <div className="flex w-100 items-center">
                   <span
                     className="text-prim-dark-100 font-medium w-4/5"
-                    key={index}
+                    key={index+1000}
                   >
                     {variant}
                   </span>
@@ -84,12 +102,13 @@ const table = () => {
                 </div>
               </th>
             ))}
+            {/*Columns mapping in Tables*/}
             {columns.map((column, index) => (
               <th className=" w-60 -z-50">
                 <div className="flex w-100 items-center">
                   <span
                     className="text-prim-dark-100 font-medium w-3/5"
-                    key={index}
+                    key={index+2000}
                   >{`${column} ${index + 3}`}</span>
                   <div className="flex gap-3">
                     <FaRegTrashAlt
@@ -106,7 +125,7 @@ const table = () => {
         </thead>
 
         <tbody>
-          {details.map((detail, index) => (
+          {rows.map((detail, index) => (
             <tr className="group" 
             draggable
             onDragStart={()=>(dragRow.current=index)}
@@ -116,9 +135,9 @@ const table = () => {
             >
               {/*1st Column data indexing*/}
               <td className="font-reloceta text-4xl bg-slate-100 font-bold sticky left-0 z-10 -ml-5">
-                <div className="bg-slate-100 ml-5" key={index}>
+                <div className="bg-slate-100 ml-5">
                   <FaRegTrashAlt
-                    className="fill-red-600 size-8 m-2 opacity-0 group-hover:opacity-100 cursor-pointer"
+                    className="fill-red-600 size-8 m-2 opacity-0 group-hover:opacity-100 cursor-pointer" key={index+3000}
                     onClick={(event) => deleteRow(event, index)}
                   />
                   <div className="inline-flex">
@@ -132,32 +151,66 @@ const table = () => {
               <td className="bg-slate-100 sticky left-20 z-20">
                 <div
                   className="flex bg-white m-4 p-5 h-48 rounded-lg shadow-sm items-center justify-center"
-                  key={index}
                 >
                   {detail.ProductFilters.length !== 0 ? (
                     detail.ProductFilters.map((tag, index1) => (
                       <span
                         className="rounded-xl bg-slate-100 text-slate-400 border border-slate-400 inline m-2 p-2"
-                        key={index1}
+                        key={index1+4000}
                       >
                         {tag}
                       </span>
                     ))
                   ) : (
-                    <button className="flex w-100 m-4 p-2 bg-white rounded-lg shadow-md items-center">
-                      <FaPlus className="inline" /> &nbsp;Add Product Filters
-                    </button>
+                    <div>
+                      <BTN label="Add Product Filters" design={false} />
+                    </div>
+                    
                   )}
                 </div>
               </td>
-              {detail.Variants.map((variant, index) => (
+              {(detail.Variants).map((variant, index2) => (
                 <td>
                   <div
                     className="flex flex-col w-100 bg-white m-4 p-3 min-h-48 w-48 rounded-md shadow-sm items-center justify-center"
-                    key={index}
                   >
-                    {variant ? (
-                      <div className="flex flex-col  items-center gap-4">
+                    <span  key={index2+5000}></span>
+                    {
+                      variant==="" && (
+                        <div>
+                          <BTN label={"Add Design"} toggle={setShowDesign} />
+                          {console.log("index: ",index)}
+                          {(rowIndex==-1)?setRowIndex(index):""}
+                          {(colmIndex==-1)?setColmIndex(index2):""}
+                        </div>
+                      )          
+                    }
+                    {
+                      variant!=="" && (
+                        <div className="flex flex-col items-center gap-4">
+                          <div className="relative">
+                            <img
+                              src={`images/${variant}.jpg`}
+                              className="size-28 rounded-lg"
+                              alt="design 1"
+                            />
+  
+                            <button className="absolute bottom-7 left-7 flex size-8 m-4 p-2 bg-white 
+                                              rounded-lg shadow-md items-center opacity-0 group-hover:opacity-100"
+                                              onClick={()=>(setShowDesign(true))}>
+                              <FaEdit />
+                            </button>
+                          </div>
+  
+                          <p className="text-sm">{`${variant.slice(
+                            0,
+                            20
+                          )}...`}</p>
+                        </div>
+                      )
+                    }
+                    {/* {variant.length!==0 ? (
+                      <div className="flex flex-col items-center gap-4">
                         <div className="relative">
                           <img
                             src={`images/${variant}.jpg`}
@@ -165,7 +218,9 @@ const table = () => {
                             alt="design 1"
                           />
 
-                          <button className="absolute bottom-7 left-7 flex size-8 m-4 p-2 bg-white rounded-lg shadow-md items-center opacity-0 group-hover:opacity-100">
+                          <button className="absolute bottom-7 left-7 flex size-8 m-4 p-2 bg-white 
+                                            rounded-lg shadow-md items-center opacity-0 group-hover:opacity-100"
+                                            onClick={()=>(setShowDesign(true))}>
                             <FaEdit />
                           </button>
                         </div>
@@ -176,33 +231,31 @@ const table = () => {
                         )}...`}</p>
                       </div>
                     ) : (
-                      <button className="flex m-4 p-2 bg-white rounded-lg shadow-md items-center">
-                        <FaPlus className="inline" /> &nbsp;Add Design
-                      </button>
-                    )}
+                      <div>
+                        {console.log(showDesign)}
+                        <BTN label={"Add Design"} toggle={setShowDesign} />
+                        {
+        showDesign && <Design toggle={setShowDesign} getImage={setInsertImage} />
+      }
+      {insertImage && updateImage(index,index2)}
+                      </div>
+                    )} */}
                   </div>
                 </td>
               ))}
-              {columns.map((index) => (
+              {columns.map((index3) => (
                 <td>
-                  <div className="flex bg-white m-4 p-3 min-h-48 w-48 rounded-md shadow-sm items-center">
-                    <button
-                      className="flex w-100 m-4 p-2 bg-white rounded-lg shadow-md items-center"
-                      key={index}
-                    >
-                      <FaPlus className="inline" /> &nbsp;Add Design
-                    </button>
+                  <div className="flex bg-white m-4 p-3 min-h-48 w-48 rounded-md shadow-sm items-center" key={index3+6000}>
+                  <BTN label="Add Design" toggle={setShowDesign} />
                   </div>
                 </td>
               ))}
-
               {/*Add column btn*/}
               <td>
                 <button
                   className="m-4 p-3 bg-white rounded-lg shadow-sm"
                   onClick={addColumn}
                 >
-                  {/* add colm function added */}
                   <FaPlus />
                 </button>
               </td>
@@ -210,12 +263,18 @@ const table = () => {
           ))}
         </tbody>
       </table>
+        
       <button
         className="m-4 p-3 bg-white rounded-lg shadow-sm"
         onClick={addRow}
       >
         <FaPlus />
       </button>
+      {showDesign && <Design toggle={setShowDesign} getImage={setInsertImage} />}
+          {(showDesign) && updateImage(rowIndex,colmIndex)}
+
+
+      {/*notification alert styling*/}
       <ToastContainer
         position="top-center"
         autoClose={500}
@@ -228,6 +287,7 @@ const table = () => {
         pauseOnHover
         theme="light"
       />
+      
     </div>
   );
 };

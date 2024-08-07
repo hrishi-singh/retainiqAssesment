@@ -21,9 +21,6 @@ const Home = () => {
       <div className="m-4 bg-slate-100 rounded-lg w-11/12">
       <Tables />
       </div>
-      
-      
-     
     </div>
   )
 }
