@@ -209,37 +209,6 @@ const table = () => {
                         </div>
                       )
                     }
-                    {/* {variant.length!==0 ? (
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="relative">
-                          <img
-                            src={`images/${variant}.jpg`}
-                            className="size-28 rounded-lg"
-                            alt="design 1"
-                          />
-
-                          <button className="absolute bottom-7 left-7 flex size-8 m-4 p-2 bg-white 
-                                            rounded-lg shadow-md items-center opacity-0 group-hover:opacity-100"
-                                            onClick={()=>(setShowDesign(true))}>
-                            <FaEdit />
-                          </button>
-                        </div>
-
-                        <p className="text-sm">{`${variant.slice(
-                          0,
-                          20
-                        )}...`}</p>
-                      </div>
-                    ) : (
-                      <div>
-                        {console.log(showDesign)}
-                        <BTN label={"Add Design"} toggle={setShowDesign} />
-                        {
-        showDesign && <Design toggle={setShowDesign} getImage={setInsertImage} />
-      }
-      {insertImage && updateImage(index,index2)}
-                      </div>
-                    )} */}
                   </div>
                 </td>
               ))}
