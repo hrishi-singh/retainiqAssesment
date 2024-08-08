@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { FaPlus } from "react-icons/fa6";
 const button = ({label="",toggle,design=true,r,c,rowIndexfn,colmIndexfn}) => {
