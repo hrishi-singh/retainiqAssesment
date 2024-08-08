@@ -4,7 +4,7 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import data from "./data.json";
 import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import BTN from '../../Components/UI/button';
+import BTN from '../../components/UI/button';
 import Design from '../@popup/page';
 import "react-toastify/dist/ReactToastify.css";
 

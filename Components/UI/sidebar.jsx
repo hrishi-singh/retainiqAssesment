@@ -8,19 +8,19 @@ const sidebar = () => {
       
       <div className="h-4/5 flex flex-col p-4 gap-8 items-center ">
         <img src="/logo.png" alt="logo" />
-        {/* <HiOutlineLightningBolt color="#A6A6A6" className="size-7"  />
+        <HiOutlineLightningBolt color="#A6A6A6" className="size-7"  />
         <LuImage color="#A6A6A6" className="size-7" />
         <FaMeta className="size-7 fill-prim-dark-50" />
         <FaShopify className="size-7 fill-prim-dark-50" />
-        <LuShirt color="#A6A6A6" className="size-7" /> */}
+        <LuShirt color="#A6A6A6" className="size-7" />
       </div>
 
 
 
-      {/* <div className="h-1/5 flex flex-col justify-end p-4 gap-8 items-center">
+      <div className="h-1/5 flex flex-col justify-end p-4 gap-8 items-center">
         <LuCreditCard color="#A6A6A6" className="size-7" />
         <LuSettings color="#A6A6A6" className="size-7" />
-      </div> */}
+      </div>
 
     </div>
   );

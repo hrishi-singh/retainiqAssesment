@@ -1,7 +1,7 @@
 
 import "./globals.css";
 import localfont from "next/font/local"
-import Navigation from '../Components/UI/sidebar'
+import Navigation from '../components/UI/sidebar'
 const recoleta = localfont(
   {
     src:[
