@@ -10,21 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 const table = () => {
   const [showDesign,setShowDesign] =useState(false);
+  const [showFilterTags,setShowFilterTags] =useState(false);
   const [rows, setRows] = useState(data);
   const dragRow =useRef(0);
   const draggedOverRow=useRef(0);
   const [fixedVariants,setFixedVariants] = useState(["Primary Variant", "Variant 2"]);
   const [rowIndex,setRowIndex]=useState(-1);
   const [colmIndex,setColmIndex]=useState(-1);
-  const columns=[]
 
 
 
   const addColumn = (event) =>{
     event.preventDefault;
-    // const newColumn = ["Variant"];
-    // const newColumns = [newColumn];
-    // setColumns(newColumn);
     const newRows=[...rows]
     for(let i=0;i<newRows.length;i++)
     {
@@ -32,7 +29,6 @@ const table = () => {
     }
     setFixedVariants([...fixedVariants,"Variant"])
     setRows(newRows)
-    console.log(columns)
     toast.success("Variant Added");
   };
 
@@ -60,9 +56,6 @@ const table = () => {
 
   const deleteColumn = (event, index) => {
     event.preventDefault();
-    // const newColumns = [...columns];
-    // newColumns.splice(index, 1);
-    // setColumns(newColumns);
     const newRow = [...rows];
     const newColmHeader=[...fixedVariants];
     newColmHeader.splice(index,1);
@@ -70,7 +63,6 @@ const table = () => {
       newRow[i].Variants.splice(index,1);
     }
     setFixedVariants(newColmHeader)
-    // newRow.splice(index, 1);
     setRows(newRow);
 
     toast.success("Variant Removed");
@@ -82,7 +74,18 @@ const table = () => {
     newRow.splice(draggedOverRow.current,0,element)
     setRows(newRow)
   }
-
+  const updateIndex=(event,r,c)=>{
+      event.preventDefault();
+      setShowDesign(true)
+      setRowIndex(r)
+      setColmIndex(c)
+  }
+  const activeFilter=(event,r,c)=>{
+    event.preventDefault();
+    const newRow=[...rows]
+    newRow[r].ProductFilters[c].tagStatus=!(newRow[r].ProductFilters[c].tagStatus)
+    setRows(newRow)
+  }
   return (
     <div className="overflow-x-scroll">
       <table>
@@ -114,25 +117,7 @@ const table = () => {
                 </div>
               </th>
             ))}
-            {/*Columns mapping in Tables*/}
-            {columns.map((column, index) => (
-              <th className=" w-60 -z-50">
-                <div className="flex w-100 items-center">
-                  <span
-                    className="text-prim-dark-100 font-medium w-3/5"
-                    key={index+2000}
-                  >{`${column} ${index + 3}`}</span>
-                  <div className="flex gap-3">
-                    <FaRegTrashAlt
-                      className="fill-red-600  cursor-pointer"
-                      onClick={(event) => deleteColumn(event, index)}
-                    />
-                    <FaEllipsisVertical className="w-2/5" />
-                  </div>
-                </div>
-              </th>
-            ))}
-            <th>&nbsp;</th>
+            {/* <th>&nbsp;</th> */}
           </tr>
         </thead>
 
@@ -148,38 +133,44 @@ const table = () => {
               {/*1st Column data indexing*/}
               <td className="font-reloceta text-4xl bg-slate-100 font-bold sticky left-0 z-10 -ml-5">
                 <div className="bg-slate-100 ml-5">
-                  <FaRegTrashAlt
-                    className="fill-red-600 size-8 m-2 opacity-0 group-hover:opacity-100 cursor-pointer" key={index+3000}
+                 { (rows.length>1) && <FaRegTrashAlt
+                    className="fill-red-600 size-8 m-2 opacity-0 group-hover:opacity-100 cursor-pointer"
                     onClick={(event) => deleteRow(event, index)}
-                  />
+                  />}
                   <div className="inline-flex">
                     {index + 1}&nbsp;
-                    <FaGripVertical />
+                    <FaGripVertical key={index+3000}/>
                   </div>
                 </div>
               </td>
 
               {/*2nd Column Filters*/}
               <td className="bg-slate-100 sticky left-20 z-20">
+                <div className="flex flex-wrap items-center justify-center  min-h-48 w-96 bg-white rounded-lg shadow-sm ">
                 <div
-                  className="flex bg-white m-4 p-5 h-48 rounded-lg shadow-sm items-center justify-center"
+                  className="flex flex-wrap justify-center h-min"
                 >
                   {detail.ProductFilters.length !== 0 ? (
                     detail.ProductFilters.map((tag, index1) => (
-                      <span
-                        className="rounded-xl bg-slate-100 text-slate-400 border border-slate-400 inline m-2 p-2"
+                      <button
+                        className={`rounded-md inline m-1 px-2 font-medium text-sm border ${tag.tagStatus?"bg-prim-green-50 text-prim-green-100 border-prim-green-100":"bg-white text-prim-dark-200 shadow-sm border-slate-200"}`}
                         key={index1+4000}
+                        onClick={(event)=>activeFilter(event,index,index1)}
                       >
-                        {tag}
-                      </span>
+                        {console.log(tag)}
+                        {tag.tagName}
+                      </button>
                     ))
                   ) : (
                     <div>
-                      <BTN label="Add Product Filters" design={false} />
+                      <BTN label={"Add Product Filters"} toggle={setShowFilterTags} r={index} design={false} rowIndexfn={setRowIndex}/>
+
                     </div>
                     
                   )}
                 </div>
+                </div>
+                
               </td>
               {(detail.Variants).map((variant, index2) => (
                 <td>
@@ -190,13 +181,13 @@ const table = () => {
                     {
                       (variant.length===0)? (
                         <div>
-                          {console.log(`BEFORE row index: ${rowIndex} and colm index: ${colmIndex}`)}
-                          <BTN label={"Add Design"} toggle={setShowDesign} design={true} r={index} c={index2} rowIndexfn={setRowIndex} colmIndexfn={setColmIndex} />
+                          {/* {console.log(`BEFORE row index: ${rowIndex} and colm index: ${colmIndex}`)} */}
+                          <BTN label={"Add Design"} toggle={setShowDesign} r={index} c={index2} rowIndexfn={setRowIndex} colmIndexfn={setColmIndex} />
 
                         </div>
                       ):(
                         <div className="flex flex-col items-center gap-4">
-                        {console.log(`AFTER row index: ${rowIndex} and colm index: ${colmIndex}`)}
+                        {/* {console.log(`AFTER row index: ${rowIndex} and colm index: ${colmIndex}`)} */}
                           <div className="relative">
                             <img
                               src={`images/${variant}.jpg`}
@@ -206,7 +197,8 @@ const table = () => {
   
                             <button className="absolute bottom-7 left-7 flex size-8 m-4 p-2 bg-white 
                                               rounded-lg shadow-md items-center opacity-0 group-hover:opacity-100"
-                                              onClick={()=>(setShowDesign(true))}>
+                                              onClick={(e)=>updateIndex(e,index,index2)}>
+                                                
                               <FaEdit />
                             </button>
                           </div>
@@ -221,14 +213,7 @@ const table = () => {
                   </div>
                 </td>
               ))}
-              {columns.map((index3) => (
-                <td>
-                  <div className="flex bg-white m-4 p-3 min-h-48 w-48 rounded-md shadow-sm items-center" key={index3+6000}>
-                  {/* <BTN label="Add Design" toggle={setShowDesign} /> */}
-                  <BTN label={"Add Design"} toggle={setShowDesign} design={true} r={index} c={index3} rowIndexfn={setRowIndex} colmIndexfn={setColmIndex} />
-                  </div>
-                </td>
-              ))}
+              
               {/*Add column btn*/}
               <td>
                 <button
@@ -249,10 +234,9 @@ const table = () => {
       >
         <FaPlus />
       </button>
-      {showDesign && <Design toggle={setShowDesign} data={rows} r={rowIndex} c={colmIndex}  update={setRows}/>}
-          {/* {(showDesign) && updateImage(rowIndex,colmIndex)} */}
-          {console.log(rows)}
-
+      {showDesign && <Design showImages={true} showCatalouge={setShowDesign} data={rows} r={rowIndex} c={colmIndex}  update={setRows}/>}
+      {showFilterTags && <Design showImages={false}  showCatalouge={setShowFilterTags} data={rows} r={rowIndex} c={colmIndex}  update={setRows}/>}
+          {/* {console.log(rows)} */}
 
       {/*notification alert styling*/}
       <ToastContainer

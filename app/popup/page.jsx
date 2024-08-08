@@ -1,33 +1,51 @@
 import React from "react";
 import { LuImage } from "react-icons/lu";
+import { TbPlaystationCircle } from "react-icons/tb";
 import Catalouge from "./catalouge.json";
-
-const ImageSelection = ({toggle,data,r,c,update}) => {
+import FilterTags from "./filterTags.json";
+const ImageSelection = ({showImages,showCatalouge,data,r,c,update}) => {
   const updateRows= (event,ImageFileName)=>{
     event.preventDefault();
     const newRow=[...data]
     newRow[r].Variants.splice(c,1,ImageFileName)
     update(newRow)
-    toggle(false)
-    // setRows(newRow)
+    showCatalouge(false)
+  }
+  const addFilters=(event,tags)=>{
+    event.preventDefault();
+    const newRow=[...data]
+    const newTag={
+      "tagName":`${tags}`,
+      "tagStatus":true
+    }
+   newRow[r].ProductFilters.splice(0,0,newTag)
+    update(newRow)
+    // showCatalouge(false)
   }
   return (
     <div className="popup fixed top-0 left-0 w-full h-lvh z-20 bg-opacity-30 bg-prim-dark-50 flex justify-center items-center">
       <div className="popup-inner relative p-8 w-full max-w-screen-lg h-3/4 bg-white rounded-lg overflow-y-scroll">
         <div>
-          <LuImage color="#04ae56"  className="size-10 m-4"/>
+        <TbPlaystationCircle strokeWidth={0.1} color="#e2e8f0" className="absolute size-64 -top-16 -left-16 z-0 "/>
+        <div className="relative size-10">
+          <LuImage color="#04ae56"  className="relative size-10 m-4 z-10"/>
+        <div className="absolute top-0 left-4 size-10 bg-prim-green-50 blur z-0">
+          </div>
+        </div>
           <button
             className="close-btn absolute top-4 right-4"
-            onClick={() => toggle(false)}
+            onClick={() => showCatalouge(false)}
           >
             X
           </button>
         </div>
-        <div className="flex">
-          <h2 className="font-semibold w-3/4">Select a design to link</h2>
+        <div className="flex z-10 m-4">
+          <h2 className="font-semibold text-2xl w-3/4 ">Select a design to link</h2>
           <p>Serarch box</p>
         </div>
-        <div className="flex flex-wrap gap-4">
+        <div className="mt-8 bg-slate-200 h-0.5 w-full"></div>
+        {
+          (showImages)? <div className="flex flex-wrap gap-4">
           {
             Catalouge.map((ImageDetails,index)=>{
               return(
@@ -41,20 +59,32 @@ const ImageSelection = ({toggle,data,r,c,update}) => {
                                 >
                     Insert</button>
                   </div>
-              <p>Lorem ipsum, </p>
+              <p className="flex w-48 text-wrap">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
             </div>
               )
             })
           }
-            
-            
-        </div>
+        </div>:
+        <div className="flex flex-wrap gap-2">
+          {
+          FilterTags.map((tags,index)=>{
+            return (
+              <button
+                        className="rounded-xl bg-slate-100 text-slate-400 border border-slate-400 inline m-2 p-2"
+                        key={index}
+                        onClick={(event)=>addFilters(event,tags)}
+                      >
+                        {tags}
+                      </button>
+            )
+          })
+          }
+          </div>
+        }
+        
       </div>
     </div>
   );
 };
-// ImageSelection.defaultProps={
-//   toggle: false
-// }
 
 export default ImageSelection;
