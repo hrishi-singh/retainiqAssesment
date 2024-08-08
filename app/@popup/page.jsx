@@ -84,7 +84,7 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
                 <div className="m-3">
                   <div className="relative group">
                     <img
-                      src={`Images/${ImageDetails.ImageFileName}.jpg`}
+                      src={`images/${ImageDetails.ImageFileName}.jpg`}
                       key={index}
                       className="flex bg-slate-700 size-48 rounded-md shadow-sm items-center justify-center"
                       alt=""
