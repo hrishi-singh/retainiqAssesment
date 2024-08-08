@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { LuImage, LuFilter,LuSearch } from "react-icons/lu";
+import { LuImage, LuFilter, LuSearch } from "react-icons/lu";
 import { TbPlaystationCircle } from "react-icons/tb";
 import Catalouge from "./catalouge.json";
 import FilterTags from "./filterTags.json";
@@ -9,10 +9,8 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
   const [isSelected, setIsSelected] = useState(
     [...Array(FilterTags.length)].fill(false)
   );
-  const [tagLimit,setTagLimit]=useState(1);
-  
-  
-  
+  const [tagLimit, setTagLimit] = useState(1);
+
   const updateRows = (event, ImageFileName) => {
     event.preventDefault();
     const newRow = [...data];
@@ -24,9 +22,8 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
   const addFilters = (event, tags, index) => {
     event.preventDefault();
     const newSelected = [...isSelected];
-    setTagLimit(tagLimit+1);
-    if(tagLimit===5)
-      showCatalouge(false)
+    setTagLimit(tagLimit + 1);
+    if (tagLimit === 5) showCatalouge(false);
     newSelected[index] = true;
     setIsSelected(newSelected);
 
@@ -70,8 +67,13 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
             {!showImages && <span>select 5 most appropriate tags</span>}
           </div>
           <div className="inline-flex rounded-lg border-2 border-blue-200 items-center p-2 gap-1">
-            <LuSearch strokeWidth={1}/>
-            <input type="text" placeholder="Search" className="outline-slate-50 outline-4 text-prim-dark-200 cursor-not-allowed" disabled />
+            <LuSearch strokeWidth={1} />
+            <input
+              type="text"
+              placeholder="Search"
+              className="outline-slate-50 outline-4 text-prim-dark-200 cursor-not-allowed"
+              disabled
+            />
           </div>
         </div>
         <div className="mt-8 bg-slate-200 h-0.5 w-full"></div>
@@ -82,7 +84,7 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
                 <div className="m-3">
                   <div className="relative group">
                     <img
-                      src={`Images/${ImageDetails.ImageFileName}.jpg`}
+                      src={`images/${ImageDetails.ImageFileName}.jpg`}
                       key={index}
                       className="flex bg-slate-700 size-48 rounded-md shadow-sm items-center justify-center"
                       alt=""
@@ -116,7 +118,7 @@ const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
                         : "border-slate-400 bg-slate-100 text-slate-400"
                     } `}
                   key={index}
-                  onClick={((event) => addFilters(event, tags, index))}
+                  onClick={(event) => addFilters(event, tags, index)}
                 >
                   {tags}
                 </button>

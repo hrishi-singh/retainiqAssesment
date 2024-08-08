@@ -5,7 +5,7 @@ import data from "./data.json";
 import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import BTN from '../../Components/UI/button';
-import Design from '../popup/page';
+import Design from '../@popup/page';
 import "react-toastify/dist/ReactToastify.css";
 
 const table = () => {
