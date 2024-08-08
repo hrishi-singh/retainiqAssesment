@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { LuImage, LuFilter, LuSearch } from "react-icons/lu";
 import { TbPlaystationCircle } from "react-icons/tb";
-import Catalouge from "./catalouge.json";
-import FilterTags from "./filterTags.json";
+import Catalouge from "../@popupDatabase/catalouge.json";
+import FilterTags from "../@popupDatabase/filterTags.json";
 const ImageSelection = ({ showImages, showCatalouge, data, r, c, update }) => {
   const [isSelected, setIsSelected] = useState(
     [...Array(FilterTags.length)].fill(false)

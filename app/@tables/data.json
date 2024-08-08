@@ -1,58 +1,57 @@
 [
-    {
-    "ProductFilters": [{
-        "tagName":"image_list.Product Image 2",
-        "tagStatus":false
-    },
-    {
-        "tagName":"is empty",
-        "tagStatus":true
-    },
-    {
-        "tagName":"AND Discount Percentage",
-        "tagStatus":false
-    },
-    {
-        "tagName":"is",
-        "tagStatus":true
-    },
-    {
-        "tagName":"0",
-        "tagStatus":false
-    }
-        
+  {
+    "ProductFilters": [
+      {
+        "tagName": "image_list.Product Image 2",
+        "tagStatus": false
+      },
+      {
+        "tagName": "is empty",
+        "tagStatus": true
+      },
+      {
+        "tagName": "AND Discount Percentage",
+        "tagStatus": false
+      },
+      {
+        "tagName": "is",
+        "tagStatus": true
+      },
+      {
+        "tagName": "0",
+        "tagStatus": false
+      }
     ],
-    "Variants": ["","img6"]
-},
-{
-    "ProductFilters": [{
-        "tagName":"Product Collection",
-        "tagStatus":false
-    },
-    {
-        "tagName":"contains",
-        "tagStatus":true
-    },
-    {
-        "tagName":"Anarkali Kurtas",
-        "tagStatus":false
-    }
-        
+    "Variants": ["", "img6"]
+  },
+  {
+    "ProductFilters": [
+      {
+        "tagName": "Product Collection",
+        "tagStatus": false
+      },
+      {
+        "tagName": "contains",
+        "tagStatus": true
+      },
+      {
+        "tagName": "Anarkali Kurtas",
+        "tagStatus": false
+      }
     ],
-    "Variants": ["img2",""]
-},
-{
-    "ProductFilters": [{
-        "tagName":"onsale",
-        "tagStatus":false
-    },
-    {
-        "tagName":"contains",
-        "tagStatus":true
-    }
-        
+    "Variants": ["img2", ""]
+  },
+  {
+    "ProductFilters": [
+      {
+        "tagName": "onsale",
+        "tagStatus": false
+      },
+      {
+        "tagName": "contains",
+        "tagStatus": true
+      }
     ],
-    "Variants": ["img1","img4"]
-}
-
+    "Variants": ["img1", "img4"]
+  }
 ]
