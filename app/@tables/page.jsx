@@ -10,22 +10,29 @@ import "react-toastify/dist/ReactToastify.css";
 
 const table = () => {
   const [showDesign,setShowDesign] =useState(false);
-  const [insertImage,setInsertImage]=useState("");
   const [rows, setRows] = useState(data);
-  const [columns, setColumns] = useState([]);
   const dragRow =useRef(0);
   const draggedOverRow=useRef(0);
-  const fixedVariants = ["Primary Variant", "Variant 2"];
+  const [fixedVariants,setFixedVariants] = useState(["Primary Variant", "Variant 2"]);
   const [rowIndex,setRowIndex]=useState(-1);
   const [colmIndex,setColmIndex]=useState(-1);
+  const columns=[]
 
 
 
   const addColumn = (event) =>{
     event.preventDefault;
-    const newColumn = "Variant";
-    const newColumns = [...columns, newColumn];
-    setColumns(newColumns);
+    // const newColumn = ["Variant"];
+    // const newColumns = [newColumn];
+    // setColumns(newColumn);
+    const newRows=[...rows]
+    for(let i=0;i<newRows.length;i++)
+    {
+      newRows[i].Variants.push("");
+    }
+    setFixedVariants([...fixedVariants,"Variant"])
+    setRows(newRows)
+    console.log(columns)
     toast.success("Variant Added");
   };
 
@@ -34,7 +41,7 @@ const table = () => {
     event.preventDefault();
     const newRow = {
       ProductFilters: [],
-      Variants: ["", ""],
+      Variants: [...Array((rows[0].Variants.length))].fill(""),
     };
     const newRows = [...rows, newRow];
     setRows(newRows);
@@ -53,9 +60,19 @@ const table = () => {
 
   const deleteColumn = (event, index) => {
     event.preventDefault();
-    const newColumns = [...columns];
-    newColumns.splice(index, 1);
-    setColumns(newColumns);
+    // const newColumns = [...columns];
+    // newColumns.splice(index, 1);
+    // setColumns(newColumns);
+    const newRow = [...rows];
+    const newColmHeader=[...fixedVariants];
+    newColmHeader.splice(index,1);
+    for(let i=0;i<newRow.length;i++){
+      newRow[i].Variants.splice(index,1);
+    }
+    setFixedVariants(newColmHeader)
+    // newRow.splice(index, 1);
+    setRows(newRow);
+
     toast.success("Variant Removed");
   };
 
@@ -64,15 +81,6 @@ const table = () => {
     const element=newRow.splice(dragRow.current,1)[0];
     newRow.splice(draggedOverRow.current,0,element)
     setRows(newRow)
-  }
-  const updateImage=(i,j)=>{
-    const newRow=[...rows]
-    const val=insertImage
-    newRow[i].Variants.splice(j,1,val)
-    setInsertImage("")
-    setShowDesign(false)
-    setRows(newRow)
-    console.log(showDesign)
   }
 
   return (
@@ -89,15 +97,19 @@ const table = () => {
              {/*fixed variants i.e. Primary Variant and variant 2 mapping in Tables*/}
             {fixedVariants.map((variant, index) => (
               <th className=" w-60 -z-50">
-                <div className="flex w-100 items-center">
+                <div className="flex w-100 justify-center items-center">
                   <span
-                    className="text-prim-dark-100 font-medium w-4/5"
+                    className="text-prim-dark-100 font-medium w-3/5"
                     key={index+1000}
                   >
-                    {variant}
+                    {index<2?variant:`Variant ${index+1}`}
                   </span>
-                  <div>
-                    <FaEllipsisVertical className="w-1/5" />
+                  <div className="flex gap-2 w-1/5">
+                   {(index>1) && <FaRegTrashAlt
+                      className="fill-red-600  cursor-pointer"
+                      onClick={(event) => deleteColumn(event, index)}
+                    />}
+                    <FaEllipsisVertical />
                   </div>
                 </div>
               </th>
@@ -176,18 +188,15 @@ const table = () => {
                   >
                     <span  key={index2+5000}></span>
                     {
-                      variant==="" && (
+                      (variant.length===0)? (
                         <div>
-                          <BTN label={"Add Design"} toggle={setShowDesign} />
-                          {console.log("index: ",index)}
-                          {(rowIndex==-1)?setRowIndex(index):""}
-                          {(colmIndex==-1)?setColmIndex(index2):""}
+                          {console.log(`BEFORE row index: ${rowIndex} and colm index: ${colmIndex}`)}
+                          <BTN label={"Add Design"} toggle={setShowDesign} design={true} r={index} c={index2} rowIndexfn={setRowIndex} colmIndexfn={setColmIndex} />
+
                         </div>
-                      )          
-                    }
-                    {
-                      variant!=="" && (
+                      ):(
                         <div className="flex flex-col items-center gap-4">
+                        {console.log(`AFTER row index: ${rowIndex} and colm index: ${colmIndex}`)}
                           <div className="relative">
                             <img
                               src={`images/${variant}.jpg`}
@@ -207,7 +216,7 @@ const table = () => {
                             20
                           )}...`}</p>
                         </div>
-                      )
+                      )       
                     }
                   </div>
                 </td>
@@ -215,7 +224,8 @@ const table = () => {
               {columns.map((index3) => (
                 <td>
                   <div className="flex bg-white m-4 p-3 min-h-48 w-48 rounded-md shadow-sm items-center" key={index3+6000}>
-                  <BTN label="Add Design" toggle={setShowDesign} />
+                  {/* <BTN label="Add Design" toggle={setShowDesign} /> */}
+                  <BTN label={"Add Design"} toggle={setShowDesign} design={true} r={index} c={index3} rowIndexfn={setRowIndex} colmIndexfn={setColmIndex} />
                   </div>
                 </td>
               ))}
@@ -239,8 +249,9 @@ const table = () => {
       >
         <FaPlus />
       </button>
-      {showDesign && <Design toggle={setShowDesign} getImage={setInsertImage} />}
-          {(showDesign) && updateImage(rowIndex,colmIndex)}
+      {showDesign && <Design toggle={setShowDesign} data={rows} r={rowIndex} c={colmIndex}  update={setRows}/>}
+          {/* {(showDesign) && updateImage(rowIndex,colmIndex)} */}
+          {console.log(rows)}
 
 
       {/*notification alert styling*/}
